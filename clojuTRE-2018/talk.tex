@@ -1,6 +1,11 @@
 \documentclass{beamer}
+\usepackage{enumitem}
+\usepackage{minted}
+\usepackage{listings}
 \usepackage{ulem}
 \usetheme{metropolis}           % Use metropolis theme
+\newlist{arrowlist}{itemize}{1}
+\setlist[arrowlist]{label=$\Rightarrow$}
 \title{Carp}
 \subtitle{A Language for the 21st Century}
 \date{\today}
@@ -11,25 +16,149 @@
   \section{\texttt{whoami}}
   \begin{frame}{\texttt{whoami}}
     \begin{itemize}
-    \item PL nerd
-    \item CTO @ Port Zero
-    \item Carp standard library maintainer
+      \item PL nerd
+      \item CTO @ Port Zero
+      \item Carp standard library maintainer
+      \item Secretly a turtle
+    \end{itemize}
+  \end{frame}
+  \section{\texttt{man carp}}
+  \begin{frame}{\texttt{man carp}}
+    \begin{itemize}
+      \item a Lisp-1
+      \item type-inferred
+      \item borrow-checked
+      \item compiles to C
+      \item for realtime applications
     \end{itemize}
   \end{frame}
   \begin{frame}{\texttt{man carp}}
     \begin{itemize}
-    \item a Lisp-1
-    \item type-inferred
-    \item borrow-checked
-    \item for real time applications
+      \item a Lisp-1
+      \item \sout{type-inferred} statically typed, at no extra charge
+      \item \sout{borrow-checked} no GC, at not extra charge
+      \item compiles to C
+      \item for realtime applications
     \end{itemize}
   \end{frame}
-  \begin{frame}{\texttt{man carp}}
+  \begin{frame}{\texttt{whence -v carp}}
     \begin{itemize}
-    \item a Lisp-1
-    \item \sout{type-inferred} statically typed, at no extra charge
-    \item \sout{borrow-checked} no GC, at not extra charge
-    \item for real time applications
+      \item Haskell implements a Hindley-Milner type system and inference
+      \begin{arrowlist}
+        \item You don’t have to spell types out anymore!
+      \end{arrowlist}
+      \item Rust implements borrow checking
+      \begin{arrowlist}
+        \item You don’t have to manually manage memory, even without a GC!
+      \end{arrowlist}
     \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{whence -v carp}}
+    Let’s put those things together and rejoice!
+    \begin{arrowlist}
+      \item Also add some Lisp macro goodness and a near-seamless C FFI for good measure!
+    \end{arrowlist}
+  \end{frame}
+  \section{\texttt{source carp}}
+  \begin{frame}{\texttt{source carp}}
+    \begin{listing}[H]
+      \caption{A silly zepto function}
+      %\begin{minted}[linenos]{clojure}
+      %  (defn f [x y z]
+      %    (Array.nth x (* y z)))
+      %\end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+      Carp has a typed (but generic) hashmap/dictionary type.
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+      It is not a builtin type.
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+      Let’s briefly look at a simple hashmap implementation
+      \begin{itemize}
+        \item A hash function determines the placement of an element in an array of arrays.
+        \item We append the element to the array inside the other to deal with hash collisions.
+        \item Lookup combines hashing and a linear search.
+      \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+    Insert table here
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+    \begin{listing}[H]
+      \caption{The hashmap type, simplified.}
+      %\begin{minted}[linenos]{clojure}
+      %  (deftype (Map a b) [buckets (Array (Array (Pair a b)))])
+      %\end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+    \begin{listing}[H]
+      \caption{The hashmap module, with omissions.}
+      %\begin{minted}[linenos]{clojure}
+      %  (defmodule Map
+      %     (def dflt-len 256)
+      %
+      %      (defn create []
+      %         (init (Array.repeat dflt-len Array.zero)))
+      %
+      %      (defn get [map key]
+      %        ; ...
+      %      )
+      %
+      %      (defn put [map key value]
+      %        ; ...
+      %      )
+      %  )
+      %\end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}{\texttt{look hashmap}}
+    \begin{listing}[H]
+      \caption{The hashmap module, with omissions.}
+      %\begin{minted}[linenos]{clojure}
+      %  (defmodule Map
+      %      (defn create []
+      %         ; ...
+      %      )
+      %
+      %      (defn get [map key]
+      %        ; ...
+      %      )
+      %
+      %      (defn put [map key value]
+      %          (let [b (buckets map)
+      %                idx (Int.mod (hash key) (Array.length b))]
+      %            (set-buckets @map (Array.aset @b
+      %                                          idx
+      %                                          (Array.push-back @(Array.nth b idx)
+      %                                          (Pair.init @key @value)))
+      %            )
+      %         )
+      %      )
+      %  )
+      %\end{minted}
+    \end{listing}
+  \end{frame}
+  \section{open demo.live}
+  \section{exit}
+  \begin{frame}{\texttt{trap}}
+    Carp is early stage software.
+    \begin{arrowlist}
+      \item Small community, few packages
+      \item Insufficient documentation
+      \item May change under your feet
+      \item May blow up in your face!
+    \end{arrowlist}
+    We’re approaching the first stable release (0.2)
+  \end{frame}
+  \begin{frame}{\texttt{exit}}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
   \end{frame}
 \end{document}
