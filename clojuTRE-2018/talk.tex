@@ -60,13 +60,14 @@
     \end{arrowlist}
   \end{frame}
   \section{\texttt{source carp}}
-  \begin{frame}{\texttt{source carp}}
+  \begin{frame}[fragile]
+  \frametitle{\texttt{source carp}}
     \begin{listing}[H]
       \caption{A silly zepto function}
-      %\begin{minted}[linenos]{clojure}
-      %  (defn f [x y z]
-      %    (Array.nth x (* y z)))
-      %\end{minted}
+      \begin{minted}{clojure}
+(defn f [x y z]
+  (Array.nth x (* y z)))
+      \end{minted}
     \end{listing}
   \end{frame}
   \begin{frame}{\texttt{look hashmap}}
@@ -86,60 +87,51 @@
   \begin{frame}{\texttt{look hashmap}}
     Insert table here
   \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{look hashmap}}
     \begin{listing}[H]
       \caption{The hashmap type, simplified.}
-      %\begin{minted}[linenos]{clojure}
-      %  (deftype (Map a b) [buckets (Array (Array (Pair a b)))])
-      %\end{minted}
+      \begin{minted}{clojure}
+(deftype (Map a b) [buckets (Array (Array (Pair a b)))])
+      \end{minted}
     \end{listing}
   \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{look hashmap}}
     \begin{listing}[H]
       \caption{The hashmap module, with omissions.}
-      %\begin{minted}[linenos]{clojure}
-      %  (defmodule Map
-      %     (def dflt-len 256)
-      %
-      %      (defn create []
-      %         (init (Array.repeat dflt-len Array.zero)))
-      %
-      %      (defn get [map key]
-      %        ; ...
-      %      )
-      %
-      %      (defn put [map key value]
-      %        ; ...
-      %      )
-      %  )
-      %\end{minted}
+      \begin{minted}{clojure}
+(defmodule Map
+   (def dflt-len 256)
+
+    (defn create []
+       (init (Array.repeat dflt-len Array.zero)))
+
+    (defn put [map key value]
+      ; ...
+    )
+)
+      \end{minted}
     \end{listing}
   \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{look hashmap}}
     \begin{listing}[H]
       \caption{The hashmap module, with omissions.}
-      %\begin{minted}[linenos]{clojure}
-      %  (defmodule Map
-      %      (defn create []
-      %         ; ...
-      %      )
-      %
-      %      (defn get [map key]
-      %        ; ...
-      %      )
-      %
-      %      (defn put [map key value]
-      %          (let [b (buckets map)
-      %                idx (Int.mod (hash key) (Array.length b))]
-      %            (set-buckets @map (Array.aset @b
-      %                                          idx
-      %                                          (Array.push-back @(Array.nth b idx)
-      %                                          (Pair.init @key @value)))
-      %            )
-      %         )
-      %      )
-      %  )
-      %\end{minted}
+      \begin{minted}{clojure}
+ (defn put [map key value]
+     (let [buckets (buckets map)
+           len (Array.length buckets)
+           idx (Int.mod (hash key) len)
+           bucket @(Array.nth buckets idx)
+           pair (Pair.init @key @value)
+           new-bucket (Array.push-back bucket pair)
+           new-buckets (Array.aset @b
+                                   idx
+                                   new-bucket)
+          ]
+       (set-buckets @map new-buckets)))
+      \end{minted}
     \end{listing}
   \end{frame}
   \section{open demo.live}
