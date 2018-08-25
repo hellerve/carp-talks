@@ -119,18 +119,18 @@
     \begin{listing}[H]
       \caption{Defining \texttt{put}.}
       \begin{minted}{clojure}
- (defn put [map key value]
-     (let [buckets (buckets map)
-           len (Array.length buckets)
-           idx (Int.mod (hash key) len)
-           bucket @(Array.nth buckets idx)
-           pair (Pair.init @key @value)
-           new-bucket (Array.push-back bucket pair)
-           new-buckets (Array.aset @b
-                                   idx
-                                   new-bucket)
-          ]
-       (set-buckets @map new-buckets)))
+(defn put [map key value]
+   (let [buckets (buckets map)
+         len (Array.length buckets)
+         idx (Int.mod (hash key) len)
+         bucket @(Array.nth buckets idx)
+         pair (Pair.init @key @value)
+         new-bucket (Array.push-back bucket pair)
+         new-buckets (Array.aset @b
+                                 idx
+                                 new-bucket)
+        ]
+     (set-buckets @map new-buckets)))
       \end{minted}
     \end{listing}
   \end{frame}
@@ -140,11 +140,34 @@
     Carp is early stage software.
     \begin{arrowlist}
       \item Small community, few packages
+      \item We’re less than a handful of maintainers
       \item Insufficient documentation
       \item May change under your feet
       \item May blow up in your face!
     \end{arrowlist}
     We’re approaching the first stable release (0.2)
+  \end{frame}
+  \begin{frame}{\texttt{trap}}
+    Full disclosure: At runtime, there are no lists.
+  \end{frame}
+  \begin{frame}{\texttt{trap}}
+    Kiss \texttt{car}, \texttt{cdr}, \texttt{quote} and \texttt{eval} goodbye.
+  \end{frame}
+  \begin{frame}{\texttt{trap}}
+    At macro expansion, you have business as usual... at the expense of type safety.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{trap}}
+    \begin{listing}[H]
+      \caption{Conditionals as macros.}
+      \begin{minted}{clojure}
+(defmacro when [condition form]
+  (list 'if condition form (list)))
+
+(defmacro unless [condition form]
+  (list 'if condition (list) form))
+      \end{minted}
+    \end{listing}
   \end{frame}
   \begin{frame}{\texttt{exit}}
     \Huge Thank you!
