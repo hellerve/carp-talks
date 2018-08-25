@@ -65,8 +65,10 @@
     \begin{listing}[H]
       \caption{A silly Carp function}
       \begin{minted}{clojure}
+; (type f)
+; f : (λ [(Ref (Array a)), Int, Int] a)
 (defn f [x y z]
-  (Array.nth x (* y z)))
+  @(Array.nth x (* y z)))
       \end{minted}
     \end{listing}
   \end{frame}
