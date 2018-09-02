@@ -1,8 +1,9 @@
+COMPILER=xelatex
 TARGET=talk
 
 all:
-	xelatex -shell-escape ${TARGET}
-	xelatex -shell-escape ${TARGET}
+	${COMPILER} -shell-escape ${TARGET}
+	${COMPILER} -shell-escape ${TARGET}
 	make cleanup
 
 cleanup:
