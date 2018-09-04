@@ -1,6 +1,6 @@
-# Enthusiasticon 2018
+# EnthusiastiCon 2018
 
-I’ve given a talk on Carp at Enthusiasticon 2018. You can look at
+I’ve given a talk on Carp at EnthusiastiCon 2018. You can look at
 [the proposal](https://github.com/hellerve/e12n-proposal) or the
 [slides](https://github.com/hellerve/carp-intro).
 
