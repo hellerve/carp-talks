@@ -71,100 +71,124 @@
       \end{minted}
     \end{listing}
   \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
-      Carp has a typed (but generic) hashmap/dictionary type.
-  \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
-      It is not a builtin type.
-  \end{frame}
-  \begin{frame}{\texttt{look hashmap}}
-      Let’s briefly look at a simple hashmap implementation
-      \begin{itemize}
-        \item A hash function determines the placement of an element in an array of arrays.
-        \item We append the element to the array inside the other to deal with hash collisions.
-        \item Lookup combines hashing and a linear search.
-      \end{itemize}
-  \end{frame}
   \begin{frame}[fragile]
-  \frametitle{\texttt{look hashmap}}
-    \begin{figure}
-      \caption{A bucketed hashmap.}
-      \tikzset{
-            > = Stealth,
-Matrix/.style = {matrix of nodes,
-                 column 1/.style={nodes={draw, minimum size=10mm}},
-                 column 2/.style={nodes={draw, minimum size=10mm}},
-                 column 3/.style={nodes={draw, minimum size=10mm}},
-                 column 5/.style={nodes={draw, minimum size=10mm}},
-                 column 4/.style={font=\normalfont},
-                 column sep=-\pgflinewidth, row sep=0.7cm}
-      }
-      \begin{tikzpicture}
-        \matrix (m) [Matrix]
-        {
-        0 & 1 & 2 & ... & N \\
-        e0-0 & e1-0 & e2-0 & ... & eN-0 \\
-        e0-1 & e1-1 & & & \\
-        & e1-2 &  & & \\
-        };
-        \draw[<->] (m-1-1) edge (m-2-1)
-                   (m-1-2) edge (m-2-2)
-                   (m-1-3) edge (m-2-3)
-                   (m-1-5) edge (m-2-5)
-                   (m-2-1) edge (m-3-1)
-                   (m-2-2) edge (m-3-2)
-                   (m-3-2) edge (m-4-2);
-      \end{tikzpicture}
-    \end{figure}
-  \end{frame}
-  \begin{frame}[fragile]
-    \frametitle{\texttt{look hashmap}}
+    \frametitle{\texttt{source carp}}
     \begin{listing}[H]
-      \caption{The hashmap type, simplified.}
+      \caption{An associative array type, simplified.}
       \begin{minted}{clojure}
-(deftype (Map a b) [buckets (Array (Array (Pair a b)))])
+(deftype (AssocArray a b) [lst (Array (Pair a b))])
       \end{minted}
     \end{listing}
   \end{frame}
-  \begin{frame}[fragile]
-    \frametitle{\texttt{look hashmap}}
-    \begin{listing}[H]
-      \caption{The hashmap module, with omissions.}
-      \begin{minted}{clojure}
-(defmodule Map
-   (def dflt-len 256)
-
-    (defn create []
-       (init (Array.repeat dflt-len Array.zero)))
-
-    (defn put [map key value]
-      ; ...
-    )
-)
-      \end{minted}
-    \end{listing}
-  \end{frame}
-  \begin{frame}[fragile]
-    \frametitle{\texttt{look hashmap}}
-    \begin{listing}[H]
-      \caption{Defining \texttt{put}.}
-      \begin{minted}{clojure}
-(defn put [map key value]
-   (let [buckets (buckets map)
-         len (Array.length buckets)
-         idx (Int.mod (hash key) len)
-         bucket @(Array.nth buckets idx)
-         pair (Pair.init @key @value)
-         new-bucket (Array.push-back bucket pair)
-         new-buckets (Array.aset @buckets
-                                 idx
-                                 new-bucket)
-        ]
-     (set-buckets @map new-buckets)))
-      \end{minted}
-    \end{listing}
-  \end{frame}
+%  \begin{frame}{\texttt{look hashmap}}
+%      Carp has a typed (but generic) hashmap/dictionary type.
+%  \end{frame}
+%  \begin{frame}{\texttt{look hashmap}}
+%      It is not a builtin type.
+%  \end{frame}
+%  \begin{frame}{\texttt{look hashmap}}
+%      Let’s briefly look at a simple hashmap implementation
+%      \begin{itemize}
+%        \item A hash function determines the placement of an element in an array of arrays.
+%        \item We append the element to the array inside the other to deal with hash collisions.
+%        \item Lookup combines hashing and a linear search.
+%      \end{itemize}
+%  \end{frame}
+%  \begin{frame}[fragile]
+%  \frametitle{\texttt{look hashmap}}
+%    \begin{figure}
+%      \caption{A bucketed hashmap.}
+%      \tikzset{
+%            > = Stealth,
+%Matrix/.style = {matrix of nodes,
+%                 column 1/.style={nodes={draw, minimum size=10mm}},
+%                 column 2/.style={nodes={draw, minimum size=10mm}},
+%                 column 3/.style={nodes={draw, minimum size=10mm}},
+%                 column 5/.style={nodes={draw, minimum size=10mm}},
+%                 column 4/.style={font=\normalfont},
+%                 column sep=-\pgflinewidth, row sep=0.7cm}
+%      }
+%      \begin{tikzpicture}
+%        \matrix (m) [Matrix]
+%        {
+%        0 & 1 & 2 & ... & N \\
+%        e0-0 & e1-0 & e2-0 & ... & eN-0 \\
+%        e0-1 & e1-1 & & & \\
+%        & e1-2 &  & & \\
+%        };
+%        \draw[<->] (m-1-1) edge (m-2-1)
+%                   (m-1-2) edge (m-2-2)
+%                   (m-1-3) edge (m-2-3)
+%                   (m-1-5) edge (m-2-5)
+%                   (m-2-1) edge (m-3-1)
+%                   (m-2-2) edge (m-3-2)
+%                   (m-3-2) edge (m-4-2);
+%      \end{tikzpicture}
+%    \end{figure}
+%  \end{frame}
+%  \begin{frame}[fragile]
+%    \frametitle{\texttt{look hashmap}}
+%    \begin{listing}[H]
+%      \caption{The hashmap type, simplified.}
+%      \begin{minted}{clojure}
+%(deftype (Map a b) [buckets (Array (Array (Pair a b)))])
+%      \end{minted}
+%    \end{listing}
+%  \end{frame}
+%  \begin{frame}[fragile]
+%    \frametitle{\texttt{look hashmap}}
+%    \begin{listing}[H]
+%      \caption{The hashmap module, with omissions.}
+%      \begin{minted}{clojure}
+%(defmodule Map
+%   (def dflt-len 256)
+%
+%    (defn create []
+%       (init (Array.repeat dflt-len Array.zero)))
+%
+%    (defn put [map key value]
+%      ; ...
+%    )
+%)
+%      \end{minted}
+%    \end{listing}
+%  \end{frame}
+%  \begin{frame}[fragile]
+%    \frametitle{\texttt{look hashmap}}
+%    \begin{listing}[H]
+%      \caption{Defining \texttt{put}.}
+%      \begin{minted}{clojure}
+%(defn put [map key value]
+%   (let [buckets (buckets map)
+%         len (Array.length buckets)
+%         idx (Int.mod (hash key) len)
+%         bucket @(Array.nth buckets idx)
+%         pair (Pair.init @key @value)
+%         new-bucket (Array.push-back bucket pair)
+%         new-buckets (Array.aset @buckets
+%                                 idx
+%                                 new-bucket)
+%        ]
+%     (set-buckets @map new-buckets)))
+%      \end{minted}
+%    \end{listing}
+%  \end{frame}
   \section{open demo.live}
+  \section{cmp clojure carp}
+  \begin{frame}{\texttt{cmp clojure carp}}
+    \begin{tabular}{ l | l }
+      Carp & Clojure \\
+      \hline
+      \hline
+      Statically typed & Dynamically typed \\ \hline
+      Compiled & Kind of compiled? \\ \hline
+      Works with C & Works with Java (and JS) \\ \hline
+      \hline
+      Modules & Namespaces \\ \hline
+      Compile-time metaprogramming & full metaprogramming \\ \hline
+      Interfaces & Protocols \\
+    \end{tabular}
+  \end{frame}
   \section{exit}
   \begin{frame}{\texttt{trap}}
     Carp is early stage software.
@@ -177,28 +201,28 @@ Matrix/.style = {matrix of nodes,
     \end{itemize}
     We’re approaching the first stable release (0.3)
   \end{frame}
-  \begin{frame}{\texttt{trap}}
-    Full disclosure: At runtime, there are no lists.
-  \end{frame}
-  \begin{frame}{\texttt{trap}}
-    Kiss \texttt{car}, \texttt{cdr}, \texttt{quote} and \texttt{eval} goodbye.
-  \end{frame}
-  \begin{frame}{\texttt{trap}}
-    At macro expansion, you have business as usual... at the expense of type safety.
-  \end{frame}
-  \begin{frame}[fragile]
-    \frametitle{\texttt{trap}}
-    \begin{listing}[H]
-      \caption{Conditionals as macros.}
-      \begin{minted}{clojure}
-(defmacro when [condition form]
-  (list 'if condition form (list)))
-
-(defmacro unless [condition form]
-  (list 'if condition (list) form))
-      \end{minted}
-    \end{listing}
-  \end{frame}
+%  \begin{frame}{\texttt{trap}}
+%    Full disclosure: At runtime, there are no lists.
+%  \end{frame}
+%  \begin{frame}{\texttt{trap}}
+%    Kiss \texttt{car}, \texttt{cdr}, \texttt{quote} and \texttt{eval} goodbye.
+%  \end{frame}
+%  \begin{frame}{\texttt{trap}}
+%    At macro expansion, you have business as usual... at the expense of type safety.
+%  \end{frame}
+%  \begin{frame}[fragile]
+%    \frametitle{\texttt{trap}}
+%    \begin{listing}[H]
+%      \caption{Conditionals as macros.}
+%      \begin{minted}{clojure}
+%(defmacro when [condition form]
+%  (list 'if condition form (list)))
+%
+%(defmacro unless [condition form]
+%  (list 'if condition (list) form))
+%      \end{minted}
+%    \end{listing}
+%  \end{frame}
   \begin{frame}{\texttt{exit}}
     \Huge Thank you!
     \linebreak
