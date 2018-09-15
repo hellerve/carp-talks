@@ -1,0 +1,14 @@
+(load "git@github.com:hellerve/anima.carp@master")
+(use Anima)
+
+(def size 800)
+(def margin 100)
+
+(defn setup [rend] ())
+
+(defn draw [rend]
+  (background rend 20))
+
+(defsketch "Whispering Drink" size size
+  setup
+  draw)
