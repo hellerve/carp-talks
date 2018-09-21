@@ -1,0 +1,185 @@
+\documentclass[aspectratio=169]{beamer}
+\usepackage{minted}
+\usepackage{listings}
+\usetheme{metropolis}
+\title{Carp}
+\subtitle{A Language for the 21st Century}
+\date{\today}
+\author{Veit Heller}
+\institute{Port Zero}
+\begin{document}
+  \maketitle
+  \section{\texttt{man carp}}
+  \begin{frame}{\texttt{man carp}}
+    \begin{itemize}
+      \item a Lisp-1
+      \item type-inferred
+      \item borrow-checked
+      \item compiles to C
+      \item for realtime applications
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{man carp}}
+    \begin{itemize}
+      \item a Lisp-1
+      \item type-inferred $\Rightarrow$ statically typed, at no extra charge
+      \item borrow-checked $\Rightarrow$ no GC, at no extra charge
+      \item compiles to C
+      \item for realtime applications
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{whence -v carp}}
+    \begin{itemize}
+      \item Haskell implements a Hindley-Milner type system and inference
+      \begin{itemize}
+        \item[$\Rightarrow$] You don’t have to spell types out!
+      \end{itemize}
+      \item Rust implements borrow checking
+      \begin{itemize}
+        \item[$\Rightarrow$] You don’t have to manually manage memory, even without a GC!
+      \end{itemize}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{whence -v carp}}
+    Let’s put those things together (after simplifying) and rejoice!
+    \begin{itemize}
+      \item[$\Rightarrow$] Also add some Lisp macro goodness and a near-seamless C FFI for good measure!
+    \end{itemize}
+  \end{frame}
+  \section{\texttt{source carp}}
+  \begin{frame}[fragile]
+  \frametitle{\texttt{source carp}}
+    \begin{listing}[H]
+      \caption{A silly Carp function}
+      \begin{minted}{clojure}
+; (type f)
+; f : (Fn [(Ref (Array a)), Int, Int] a)
+(defn f [x y z]
+  @(Array.nth x (* y z)))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{source carp}}
+    \begin{listing}[H]
+      \caption{An associative array type, simplified.}
+      \begin{minted}{clojure}
+(deftype (AssocArray a b) [lst (Array (Pair a b))])
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{source carp}}
+    \begin{listing}[H]
+      \caption{A module for the associative array.}
+      \begin{minted}{clojure}
+(defmodule AssocArray
+  (defn put [a k v]
+    (let [list (lst a)
+          pair (Pair k v)
+          new-list (Array.push-back list pair)]
+      (set-lst a new-list)))
+)
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{touch anima.carp}
+  \begin{frame}{\texttt{touch anima.carp}}
+    \texttt{anima.carp} is a simple animation framework based on Processing.
+  \end{frame}
+  \begin{frame}{\texttt{touch anima.carp}}
+    It uses the C FFI, a simple DSL, and macros to do its magic.
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{touch anima.carp}}
+    \begin{listing}[H]
+      \caption{Wrapping SDL.}
+      \begin{minted}{clojure}
+(local-include "../core/SDLHelper.h")
+(add-cflag "`sdl2-config --cflags --libs`")
+
+(defmodule SDL
+  (register init (Fn [Int] ()))
+  (register delay (Fn [Int] ()) "SDL_Delay")
+
+  ; ...
+)
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{touch anima.carp}}
+    \begin{listing}[H]
+      \caption{Writing a DSL.}
+      \begin{minted}{clojure}
+(defmodule Anima
+  (defn line [rend ax ay bx by]
+    (SDL.render-draw-line rend ax ay bx by))
+
+  ; ...
+)
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \begin{frame}[fragile]
+    \frametitle{\texttt{touch anima.carp}}
+    \begin{listing}[H]
+      \caption{Writing a macro.}
+      \begin{minted}{clojure}
+(defmacro defsketch [name w h setup draw]
+  (list 'defn 'main (array)
+    ; ...
+    (list setup 'rend)
+    (list 'while true
+      (list draw 'rend))))
+      \end{minted}
+    \end{listing}
+  \end{frame}
+  \section{open demo.live}
+  \section{cmp clojure carp}
+  \begin{frame}{\texttt{cmp clojure carp}}
+    \begin{tabular}{ l | l }
+      Carp & Clojure \\
+      \hline
+      \hline
+      Statically typed & Dynamically typed \\ \hline
+      Compiled & Kind of compiled? \\ \hline
+      Works with C & Works with Java (and JS) \\ \hline
+      \hline
+      Modules & Namespaces \\ \hline
+      Compile-time metaprogramming & full metaprogramming \\ \hline
+      Interfaces & Protocols \\
+    \end{tabular}
+  \end{frame}
+  \section{exit}
+  \begin{frame}{\texttt{trap}}
+    Carp is early stage software.
+    \begin{itemize}
+      \item[$\Rightarrow$] Small community, few packages
+      \item[$\Rightarrow$] We’re less than a handful of maintainers
+      \item[$\Rightarrow$] Insufficient documentation
+      \item[$\Rightarrow$] May change under your feet
+      \item[$\Rightarrow$] May blow up in your face!
+    \end{itemize}
+    We’re approaching the first stable release (0.3)
+  \end{frame}
+  \begin{frame}{\texttt{trap}}
+    \begin{itemize}
+      \item Github: \texttt{https://github.com/carp-lang/carp}
+      \item Erik: \texttt{https://github.com/eriksvedang}
+      \item Chat: \texttt{https://gitter.im/carp-lang/carp}
+      \item Docs \& Blogs: \texttt{https://blog.veitheller.de} (sorry about that)
+      \item Slides: \texttt{https://github.com/hellerve/carp\_talks}
+    \end{itemize}
+  \end{frame}
+  \begin{frame}{\texttt{exit}}
+    \Huge Thank you!
+    \linebreak
+    \linebreak
+    \linebreak
+    \small Questions?
+    \linebreak
+    \linebreak
+    \tiny Slides at \texttt{https://github.com/hellerve/carp\_talks}
+  \end{frame}
+\end{document}
