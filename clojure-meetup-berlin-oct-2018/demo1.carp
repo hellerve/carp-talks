@@ -1,23 +1,28 @@
-; lets write an assoc array!
 (deftype (AssocArray a b) [lst (Array (Pair a b))])
 
 (defmodule AssocArray
   (defn new []
-    ; ?
-    ()
+    (AssocArray.init [])
   )
 
   (defn put [a k v]
     (let [list (lst a)
-          pair (Pair k v)
-          new-list (Array.push-back list pair)]
-      (set-lst a new-list)))
+          pair (Pair.init k v)
+          new-list (Array.push-back @list pair)]
+      (set-lst @a new-list)))
 
   (defn get [a k]
-    ; ?
-    ()
+    (let-do [res (zero)]
+      (for [i 0 (Array.length (lst a))]
+        (when (= (Pair.a (Array.nth (lst a) i)) k)
+          (do
+            (set! res @(Pair.b (Array.nth (lst a) i)))
+            (break))))
+      res)
   )
 )
 
 (defn main []
-  (IO.println "Hello world!"))
+  (IO.println &(str (AssocArray.get
+                      &(AssocArray.put &(AssocArray.new) @"hi" 1)
+                      "hi"))))

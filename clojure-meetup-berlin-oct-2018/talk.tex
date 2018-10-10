@@ -76,9 +76,9 @@
 (defmodule AssocArray
   (defn put [a k v]
     (let [list (lst a)
-          pair (Pair k v)
-          new-list (Array.push-back list pair)]
-      (set-lst a new-list)))
+          pair (Pair.init k v)
+          new-list (Array.push-back @list pair)]
+      (set-lst @a new-list)))
 )
       \end{minted}
     \end{listing}
