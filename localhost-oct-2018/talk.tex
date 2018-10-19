@@ -9,6 +9,14 @@
 \institute{Port Zero}
 \begin{document}
   \maketitle
+  \begin{frame}{\texttt{whoami}}
+    \begin{itemize}
+      \item RC Summer 1 2017
+      \item Carp standard library maintainer
+      \item ... But not the creator!
+      \item Secretly a turtle
+    \end{itemize}
+  \end{frame}
   \section{\texttt{man carp}}
   \begin{frame}{\texttt{man carp}}
     \begin{itemize}
@@ -87,8 +95,9 @@
   \begin{frame}{\texttt{touch anima.carp}}
     \texttt{anima.carp} is a simple animation framework based on Processing.
   \end{frame}
+  \section{open demo.live}
   \begin{frame}{\texttt{touch anima.carp}}
-    It uses the C FFI, a simple DSL, and macros to do its magic.
+    Anima uses the C FFI, a simple DSL, and macros to do its magic.
   \end{frame}
   \begin{frame}[fragile]
     \frametitle{\texttt{touch anima.carp}}
@@ -126,17 +135,29 @@
     \begin{listing}[H]
       \caption{Writing a macro.}
       \begin{minted}{clojure}
-(defmacro defsketch [name w h setup draw]
-  (list 'defn 'main (array)
-    ; ...
-    (list setup 'rend)
-    (list 'while true
-      (list draw 'rend))))
+(defdynamic setter [f r color cs]
+  (if (= (length cs) 0)
+    (list f r color color color 255)
+    (if (= (length cs) 2)
+      (list f r color (car cs) (cadr cs) 255)
+      (list f r color (car cs) (cadr cs) (caddr cs)))))
+
+(defmacro color [r color :rest cs]
+  (setter 'set-color r color cs))
       \end{minted}
     \end{listing}
   \end{frame}
-  \section{open demo.live}
-  \section{todo: add information on compiler}
+  \section{reboot c.ffi}
+  \begin{frame}{\texttt{reboot c.ffi}}
+    Do you have to write all of the bindings by hand?
+  \end{frame}
+  \begin{frame}{\texttt{reboot c.ffi}}
+    Of course not!
+  \end{frame}
+  \begin{frame}{\texttt{reboot c.ffi}}
+    There’s a tool for that!
+  \end{frame}
+  \section{open demo.live.2}
   \section{exit}
   \begin{frame}{\texttt{trap}}
     Carp is early stage software.
