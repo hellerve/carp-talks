@@ -1,23 +1,20 @@
-; lets write an assoc array!
-(deftype (AssocArray a b) [lst (Array (Pair a b))])
+(load "git@github.com:hellerve/anima.carp@master")
+(use Anima)
 
-(defmodule AssocArray
-  (defn new []
-    ; ?
-    ()
-  )
+(def size 800)
+(def margin 100)
 
-  (defn put [a k v]
-    (let [list (lst a)
-          pair (Pair k v)
-          new-list (Array.push-back list pair)]
-      (set-lst a new-list)))
+(defn setup [] (framerate 1))
 
-  (defn get [a k]
-    ; ?
-    ()
-  )
-)
+(defn draw [rend]
+    (do
+      (background rend 20)
+      (color rend 255)
+      (for [i 0 100]
+        (let [x (Anima.random-between margin (- size margin))
+              y (Anima.random-between margin (- size margin))]
+          (line rend x x x y)))))
 
-(defn main []
-  (IO.println "Hello world!"))
+(defsketch "Whispering Drink" size size
+  setup
+  draw)
