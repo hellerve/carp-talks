@@ -19,7 +19,7 @@ I mainly want to talk about some of the ideas in Carp, and why we went with
 certain things rather than with others.
 
 Let’s talk about koalas. Many people call koalas “koala bears”, but technically
-they’re not bears at all. Botanically, they’re marsupials, which makes them
+they’re not bears at all. Biologically, they’re marsupials, which makes them
 closer to kangurus and quokkas than to bears. Still, they look like bears, and
 so people call them koala bears. In the same vein, Carp looks like Lisp, and so
 people call it a Lisp, when programming in it actually feels closer to working
@@ -122,7 +122,7 @@ in your programs are either very trivial—especially if you write numeric code�
 or very painful to type but easy to reason about, such as when using higher order
 functions. Fold, for instance, is a pretty simple operation, but its type
 signatures are mostly atrocious. And by infering those types, all of that mental
-load goes away. But sometimes, we really do need to knwo what the types of
+load goes away. But sometimes, we really do need to know what the types of
 things are, especially if there is a misunderstanding between us and the machine,
 something we thought might be possible but is actually invalid. And again,
 tooling is key to make this affordable.
