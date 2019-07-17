@@ -1,4 +1,4 @@
-(load "git@github.com:hellerve/anima.carp@master")
+(load "git@github.com:hellerve/anima.carp@0.0.1")
 (use Anima)
 
 (def size 800)
